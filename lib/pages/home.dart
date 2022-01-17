@@ -10,6 +10,7 @@ import 'package:restaurant_proto_app_b2b/models/order_data.dart';
 import 'package:restaurant_proto_app_b2b/notifiers.dart/home_notifier.dart';
 import 'package:restaurant_proto_app_b2b/notifiers.dart/ordered_notifier.dart';
 import 'package:restaurant_proto_app_b2b/services/API/orderer_service.dart';
+import 'package:restaurant_proto_app_b2b/services/socket_controller.dart';
 import 'package:restaurant_proto_app_b2b/widgets/helpWidgets/animted_text_fade.dart';
 import 'package:restaurant_proto_app_b2b/widgets/helpWidgets/distance_determiner.dart';
 import 'package:restaurant_proto_app_b2b/widgets/helpWidgets/fadeOut_bound.dart';
@@ -37,12 +38,14 @@ class _HomeState extends State<Home> with AfterLayoutMixin<Home>, SingleTickerPr
   GlobalKey<DistanceDeterminerState> distanceDeterminer = GlobalKey();
   OrderService? orderService;
   ScrollController scrollController = ScrollController();
+  SocketController? sokcetController;
 
   
   @override
   void afterFirstLayout(BuildContext context) async{
     orderService = OrderService(homeNotifier: homeNotifier!, orderNotifier: orderNotifier!);
-    await orderService?.getOrderedTables();
+    await orderService!.getOrderedTables();
+    sokcetController = SocketController(orderService: orderService!);
     homeNotifier!.distanceDeterminer = distanceDeterminer;
     // homeNotifier!.scrollController = scrollController;
     
